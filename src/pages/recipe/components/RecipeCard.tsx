@@ -25,7 +25,7 @@ export default function RecipeCard({ recipe, index }: RecipeCardProps) {
 	const [showPopup, setShowPopup] = useState(false);
 	const ref = useRef<HTMLDivElement>(null);
 	const isInView = useInView(ref, { once: true });
-	console.log("🚀 ~ RecipeCard ~ isInView:", index, isInView)
+	
 
 	useEffect(() => {
 		let timer: NodeJS.Timeout;

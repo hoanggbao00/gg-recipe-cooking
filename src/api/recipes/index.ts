@@ -7,7 +7,7 @@ export async function getRecipes(searchParams: {
 	page?: number;
 	pageSize?: number;
 }) {
-	const { query, cuisine, page = 1, pageSize = 4 } = searchParams;
+	const { query, cuisine = 'all', page = 1, pageSize = 4 } = searchParams;
 
 	let filteredRecipes = recipes;
 

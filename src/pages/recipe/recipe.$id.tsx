@@ -27,7 +27,7 @@ export default function RecipeDetailPage() {
 	return (
 		!isLoading &&
 		recipe && (
-			<div className='container mx-auto px-4 space-y-4 overflow-hidden'>
+			<div className='container mx-auto px-4 space-y-4 overflow-hidden mt-4 pb-8'>
 				<Link
 					to={'/'}
 					className={buttonVariants({

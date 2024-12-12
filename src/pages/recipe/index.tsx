@@ -1,13 +1,12 @@
 import { Route, Routes } from 'react-router-dom';
 import RecipeDetailPage from './recipe.$id';
-import RecipeLayout from './layout';
+import RecipeList from './recipe.list';
 
 export default function AdminCustomerRoute() {
 	return (
 		<Routes>
-			<Route path='/' element={<RecipeLayout />}>
-				<Route path='/:id' element={<RecipeDetailPage />} />
-			</Route>
+			<Route index path='/' element={<RecipeList />} />
+			<Route path='/:id' element={<RecipeDetailPage />} />
 		</Routes>
 	);
 }
