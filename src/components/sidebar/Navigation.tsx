@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { Grid, Heart } from 'lucide-react';
+import { Grid, Heart, User } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 const navItems = [
@@ -12,6 +12,11 @@ const navItems = [
 		path: '/',
 		label: 'For you',
 		icon: <Heart size={18} className='fill-red-400 stroke-none' />,
+	},
+	{
+		path: '/about',
+		label: 'About',
+		icon: <User size={18}/>,
 	},
 ];
 

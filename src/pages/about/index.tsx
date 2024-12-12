@@ -6,7 +6,9 @@ import Sidebar from '@/components/sidebar';
 const AboutPage: React.FC = () => {
 	return (
 		<div className='min-h-screen bg-gradient-to-br from-white via-orange-50 to-amber-100 py-16 px-4'>
-			<Sidebar />
+			<div className='md:hidden'>
+				<Sidebar />
+			</div>
 			<div className='md:container px-4 mx-auto'>
 				<div className='bg-white shadow-2xl rounded-xl overflow-hidden'>
 					<div className='bg-gradient-to-r from-amber-500 to-orange-600 text-white p-12 text-center'>
