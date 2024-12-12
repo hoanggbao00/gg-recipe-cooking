@@ -65,18 +65,12 @@
   }
 }
 
-.rdp [aria-hidden="true"] {
-  @apply hidden;
-}
-
-.rdp-vhidden {
-  @apply hidden;
-}
-
-.rdp-caption_dropdowns {
-  @apply flex items-center gap-2;
-  & > * {
-    @apply border rounded-md overflow-hidden px-0.5;
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
+}
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
 
