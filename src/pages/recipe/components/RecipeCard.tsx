@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
 	Card,
 	CardContent,
@@ -10,17 +10,22 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import PreviewPopup from './PreviewPopup';
-import { Carousel } from '../../../components/Carousel';
+import { Carousel } from '@/components/Carousel';
 import { IRecipe } from '@/types/recipe';
 import { Link } from 'react-router-dom';
+import { motion, useInView } from 'framer-motion';
 
 interface RecipeCardProps {
 	recipe: IRecipe;
+	index: number;
 }
 
-export default function RecipeCard({ recipe }: RecipeCardProps) {
+export default function RecipeCard({ recipe, index }: RecipeCardProps) {
 	const [isHovered, setIsHovered] = useState(false);
 	const [showPopup, setShowPopup] = useState(false);
+	const ref = useRef<HTMLDivElement>(null);
+	const isInView = useInView(ref, { once: true });
+	console.log("🚀 ~ RecipeCard ~ isInView:", index, isInView)
 
 	useEffect(() => {
 		let timer: NodeJS.Timeout;
@@ -38,7 +43,27 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
 	}, []);
 
 	return (
-		<div className='relative'>
+		<motion.div
+			ref={ref}
+			initial={{
+				opacity: 0,
+				y: 150,
+			}}
+			animate={{
+				opacity: isInView ? 1 : 0,
+				y: isInView ? 0 : 150,
+			}}
+			transition={{
+				delay: index * 0.1,
+				duration: '0.5',
+				ease: 'easeInOut',
+			}}
+			style={{
+				opacity: isInView ? 0 : 1,
+				transform: isInView ? "none" : "translateY(-150px)",
+			}}
+			className='relative'
+		>
 			<Card className='overflow-hidden flex flex-col h-full'>
 				<CardHeader className='p-0'>
 					<div
@@ -75,6 +100,6 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
 				</CardFooter>
 			</Card>
 			<PreviewPopup recipe={recipe} isVisible={showPopup} />
-		</div>
+		</motion.div>
 	);
 }

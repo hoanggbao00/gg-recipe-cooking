@@ -7,6 +7,7 @@ import { buttonVariants } from '@/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
 import { ErrorPage } from '@/components/common/error';
 import DetailSkeleton from './components/DetailSkeleton';
+import { motion } from 'framer-motion';
 
 export default function RecipeDetailPage() {
 	const params = useParams();
@@ -26,7 +27,7 @@ export default function RecipeDetailPage() {
 	return (
 		!isLoading &&
 		recipe && (
-			<div className='container mx-auto px-4 space-y-4'>
+			<div className='container mx-auto px-4 space-y-4 overflow-hidden'>
 				<Link
 					to={'/'}
 					className={buttonVariants({
@@ -73,7 +74,23 @@ export default function RecipeDetailPage() {
 									<h2 className='text-2xl font-semibold mb-2'>Ingredients</h2>
 									<ul className=''>
 										{recipe.ingredients.map((ingredient, index) => (
-											<li key={index} className='mb-2'>
+											<motion.li
+												initial={{
+													opacity: 0,
+													y: 50,
+												}}
+												animate={{
+													opacity: 1,
+													y: 0,
+												}}
+												transition={{
+													duration: 0.5,
+													ease: 'easeInOut',
+													delay: index * 0.1,
+												}}
+												key={index}
+												className='mb-2'
+											>
 												<div className='flex items-center'>
 													<img
 														src={ingredient.image || ''}
@@ -84,7 +101,7 @@ export default function RecipeDetailPage() {
 														{ingredient.amount} {ingredient.name}
 													</span>
 												</div>
-											</li>
+											</motion.li>
 										))}
 									</ul>
 								</div>
@@ -92,9 +109,25 @@ export default function RecipeDetailPage() {
 									<h2 className='text-2xl font-semibold mb-2'>Instructions</h2>
 									<ol className='list-decimal pl-5'>
 										{recipe.instructions.map((step, index) => (
-											<li key={index} className='mb-2'>
+											<motion.li
+												initial={{
+													opacity: 0,
+													x: 100,
+												}}
+												animate={{
+													opacity: 1,
+													x: 0,
+												}}
+												transition={{
+													duration: 0.5,
+													ease: 'easeInOut',
+													delay: index * 0.1 + 0.2 * recipe.ingredients.length,
+												}}
+												key={index}
+												className='mb-2'
+											>
 												{step}
-											</li>
+											</motion.li>
 										))}
 									</ol>
 								</div>

@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { useInView } from 'react-intersection-observer';
+import React, { useEffect, useRef } from 'react';
+import { useInView } from 'framer-motion';
 import SearchBar from '@/pages/homepage/components/SearchBar';
 import { RecipeCardSkeleton } from '@/pages/recipe/components/RecipeCardSkeleton';
 import RecipeCard from '@/pages/recipe/components/RecipeCard';
@@ -14,6 +14,7 @@ export default function Homepage() {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const cuisineServices = useCuisinesServices();
 	const { data: cuisinesData } = cuisineServices.getList();
+	const ref = useRef<HTMLDivElement>(null);
 
 	const recipeServices = useRecipeServices();
 	const {
@@ -30,59 +31,57 @@ export default function Homepage() {
 		query: searchParams.get('query') || '',
 	});
 
-	const { ref, inView } = useInView();
+	const isInView = useInView(ref);
 	// #endregion
 
 	useEffect(() => {
-		if (inView && hasNextPage) {
+		if (isInView && hasNextPage) {
 			fetchNextPage();
 		}
-	}, [inView, fetchNextPage, hasNextPage]);
+	}, [isInView, fetchNextPage, hasNextPage]);
 
 	const pageTitle = `${searchParams.get('cuisine') ?? 'All'} Recipes`;
 
 	return (
 		<div className='min-h-screen bg-gradient-to-br from-white via-orange-50 to-amber-100'>
 			<div className='container mx-auto px-4 py-8'>
-			<h1 className='text-4xl font-bold mb-8 text-center'>
-				{APP_NAME} App
-			</h1>
-			<h2 className='text-3xl font-semibold mb-6 text-center'>{pageTitle}</h2>
-			<SearchBar
-				cuisines={cuisinesData || []}
-				searchParams={searchParams}
-				setSearchParams={setSearchParams}
-			/>
+				<h1 className='text-4xl font-bold mb-8 text-center'>{APP_NAME} App</h1>
+				<h2 className='text-3xl font-semibold mb-6 text-center'>{pageTitle}</h2>
+				<SearchBar
+					cuisines={cuisinesData || []}
+					searchParams={searchParams}
+					setSearchParams={setSearchParams}
+				/>
 
-			<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8'>
-				{status === 'error' ? (
-					<div className='col-span-full text-center mt-8'>
-						Error: {(error as Error).message}
-					</div>
-				) : (
-					data?.pages.map((page, i) => (
-						<React.Fragment key={i}>
-							{page.data?.map((recipe: IRecipe) => (
-								<RecipeCard key={recipe.id} recipe={recipe} />
-							))}
-						</React.Fragment>
-					))
-				)}
-				{isFetching &&
-					Array.from({ length: 3 }).map((_, index) => (
-						<RecipeCardSkeleton key={index} />
-					))}
+				<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8'>
+					{status === 'error' ? (
+						<div className='col-span-full text-center mt-8'>
+							Error: {(error as Error).message}
+						</div>
+					) : (
+						data?.pages.map((page, i) => (
+							<React.Fragment key={i}>
+								{page.data?.map((recipe: IRecipe, index) => (
+									<RecipeCard key={recipe.id} recipe={recipe} index={index} />
+								))}
+							</React.Fragment>
+						))
+					)}
+					{isFetching &&
+						Array.from({ length: 3 }).map((_, index) => (
+							<RecipeCardSkeleton key={index} />
+						))}
+				</div>
+				<div ref={ref} className='mt-8 text-center'>
+					{isFetchingNextPage
+						? Array.from({ length: 3 }).map((_, index) => (
+								<RecipeCardSkeleton key={`next-page-${index}`} />
+						  ))
+						: hasNextPage
+						? 'Loading more...'
+						: !isFetching && 'No more recipes'}
+				</div>
 			</div>
-			<div ref={ref} className='mt-8 text-center'>
-				{isFetchingNextPage
-					? Array.from({ length: 3 }).map((_, index) => (
-							<RecipeCardSkeleton key={`next-page-${index}`} />
-					  ))
-					: hasNextPage
-					? 'Loading more...'
-					: !isFetching && 'No more recipes'}
-			</div>
-		</div>
 		</div>
 	);
 }

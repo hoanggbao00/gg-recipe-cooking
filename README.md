@@ -46,5 +46,5 @@ src/
 - **Tailwind CSS**: A utility-first CSS framework for rapidly building custom user interfaces.
 - **@tanstack/react-query**: A powerful library for managing asynchronous state in React applications.
 - **Shadcn/UI**: A collection of high-quality, accessible, and customizable UI components for React.
-- **react-intersection-observer**: A library that provides a way to track when an element enters or exits the viewport.
+- **Framer Motion**: A library that provides a way to animate
 - **Vite**: Template ReactJS
